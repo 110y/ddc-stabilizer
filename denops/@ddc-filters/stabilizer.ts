@@ -16,9 +16,15 @@ export class Filter extends BaseFilter<{}> {
   }
   ): Promise<Candidate[]> {
     for (const candidate of args.candidates) {
-      candidate.word = candidate.word.replace(/[\s]*?\$\{\d+?.*?\}[,]?[\s]*?/, "");
-      candidate.word = candidate.word.replace(/[\s]*?\$\d+?\s*?/, "");
-      candidate.word = candidate.word.replace(/\\/, "");
+      if (args.context.filetype === 'go') {
+         candidate.word = candidate.word.replace(/[\s]*?\$\{\d+?.*?\}[,]?[\s]*?/, "");
+         candidate.word = candidate.word.replace(/[\s]*?\$\d+?\s*?/, "");
+         candidate.word = candidate.word.replace(/\\/, "");
+
+         if (candidate.word.slice(-1) === ':') {
+             candidate.word += ' '
+         }
+      }
     }
 
     return args.candidates;
