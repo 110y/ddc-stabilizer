@@ -1,33 +1,29 @@
 import {
   BaseFilter,
-  Candidate,
   Context,
-} from "https://deno.land/x/ddc_vim@v0.13.0/types.ts#^";
-import {
-  Denops,
-} from "https://deno.land/x/ddc_vim@v0.13.0/deps.ts#^";
+  Item,
+} from "https://deno.land/x/ddc_vim@v2.3.1/types.ts";
 
-export class Filter extends BaseFilter<{}> {
+export class Filter extends BaseFilter<> {
   async filter(args: {
-    denops: Denops,
     context: Context,
-    completeStr: string,
-    candidates: Candidate[],
+    // completeStr: string,
+    items: Item[],
   }
-  ): Promise<Candidate[]> {
-    for (const candidate of args.candidates) {
+  ): Promise<Item[]> {
+    for (const item of args.items) {
       if (args.context.filetype === 'go') {
-         candidate.word = candidate.word.replace(/[\s]*?\$\{\d+?.*?\}[,]?[\s]*?/, "");
-         candidate.word = candidate.word.replace(/[\s]*?\$\d+?\s*?/, "");
-         candidate.word = candidate.word.replace(/\\/, "");
+         item.word = item.word.replace(/[\s]*?\$\{\d+?.*?\}[,]?[\s]*?/, "");
+         item.word = item.word.replace(/[\s]*?\$\d+?\s*?/, "");
+         item.word = item.word.replace(/\\/, "");
 
-         if (candidate.word.slice(-1) === ':') {
-             candidate.word += ' '
+         if (item.word.slice(-1) === ':') {
+             item.word += ' '
          }
       }
     }
 
-    return args.candidates;
+    return args.items;
   }
 
   params(): {} { return {}; }
