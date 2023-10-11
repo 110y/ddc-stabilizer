@@ -17,6 +17,14 @@ export class Filter extends BaseFilter<> {
          item.word = item.word.replace(/[\s]*?\$\d+?\s*?/, "");
          item.word = item.word.replace(/\\/, "");
 
+        if (item.abbr.startsWith('&') && item.abbr.endsWith('{}')) {
+          item.word = item.abbr
+        }
+
+        if (item.abbr.endsWith('{}')) {
+          item.word = item.abbr
+        }
+
          if (item.word.slice(-1) === ':') {
              item.word += ' '
          }
